@@ -8,24 +8,8 @@ import (
 )
 
 func startRepl() {
-	type cliCommand struct {
-		name        string
-		description string
-		callback    func() error
-	}
 
-	commands := map[string]cliCommand{
-		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commandHelp,
-		},
-		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commandExit,
-		},
-	}
+	commands := getCommands()
 
 	scanner := bufio.NewScanner(os.Stdin)
 
@@ -38,7 +22,20 @@ func startRepl() {
 
 		input := strings.TrimSpace(scanner.Text())
 
-		if cmdFunc, exists := commands[input]; exists {
+		cleaned := cleanInput(input)
+		if len(cleaned) == 0 {
+			continue
+		}
+
+		command := cleaned[0]
+		fmt.Println(cleaned)
+
+		switch command {
+		case "exit":
+			commandExit()
+		}
+
+		if cmdFunc, exists := commands[command]; exists {
 			cmdFunc.callback()
 			continue
 		}
@@ -49,5 +46,32 @@ func startRepl() {
 
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Error reading input: ", err)
+	}
+}
+
+func cleanInput(str string) []string {
+	lowered := strings.ToLower(str)
+	words := strings.Fields(lowered)
+	return words
+}
+
+type cliCommand struct {
+	name        string
+	description string
+	callback    func() error
+}
+
+func getCommands() map[string]cliCommand {
+	return map[string]cliCommand{
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
 	}
 }

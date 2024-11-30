@@ -9,8 +9,6 @@ import (
 
 func startRepl() {
 
-	commands := getCommands()
-
 	scanner := bufio.NewScanner(os.Stdin)
 
 	// start REPL loop
@@ -27,21 +25,21 @@ func startRepl() {
 			continue
 		}
 
-		command := cleaned[0]
+		commandName := cleaned[0]
 		fmt.Println(cleaned)
 
-		switch command {
-		case "exit":
-			commandExit()
-		}
-
-		if cmdFunc, exists := commands[command]; exists {
-			cmdFunc.callback()
+		cmdFunc, exists := getCommands()[commandName]
+		if exists {
+			err := cmdFunc.callback()
+			if err != nil {
+				fmt.Println(err)
+			}
+			continue
+		} else {
+			// Default behavior for unrecognized input
+			fmt.Println("Unknown command:", input)
 			continue
 		}
-
-		// Default behavior for unrecognized input
-		fmt.Println("Unknown command:", input)
 	}
 
 	if err := scanner.Err(); err != nil {

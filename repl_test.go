@@ -8,7 +8,22 @@ func TestCleanInput(t *testing.T) {
 		expected []string
 	}{
 		{
-			input: "HELLO world",
+			input:    " ",
+			expected: []string{},
+		},
+		{
+			input:    " hello ",
+			expected: []string{"hello"},
+		},
+		{
+			input: " hello  world  ",
+			expected: []string{
+				"hello",
+				"world",
+			},
+		},
+		{
+			input: "HelLO world",
 			expected: []string{
 				"hello",
 				"world",

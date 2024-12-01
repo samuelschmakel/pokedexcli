@@ -1,10 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	pokeapi "github.com/samuelschmakel/pokedexcli/internal/pokeapi"
+)
 
 var cliName string = "Pokedex"
 
-func commandHelp() error {
+func commandHelp(myConfig *pokeapi.Config) error {
 	fmt.Printf("Welcome to %v! These are the available commands: \n", cliName)
 	fmt.Println("")
 	for _, cmd := range getCommands() {

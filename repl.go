@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/samuelschmakel/pokedexcli/internal/pokeapi"
 )
 
 func startRepl() {
@@ -26,11 +28,10 @@ func startRepl() {
 		}
 
 		commandName := cleaned[0]
-		fmt.Println(cleaned)
 
 		cmdFunc, exists := getCommands()[commandName]
 		if exists {
-			err := cmdFunc.callback()
+			err := cmdFunc.callback(*&pokeapi.InitialConfig)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -56,7 +57,7 @@ func cleanInput(str string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*pokeapi.Config) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -70,6 +71,16 @@ func getCommands() map[string]cliCommand {
 			name:        "exit",
 			description: "Exit the Pokedex",
 			callback:    commandExit,
+		},
+		"map": {
+			name:        "map",
+			description: "Displays the next 20 location areas in the Pokemon world",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the previous 20 location areas in the Pokemon world",
+			callback:    commandMapb,
 		},
 	}
 }

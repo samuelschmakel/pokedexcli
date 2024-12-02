@@ -45,7 +45,8 @@ func commandCatch(myConfig *pokeapi.Config, params []string) error {
 		fmt.Printf("%s was caught!\n", params[0])
 
 		// Add the caught pokemon to the map
-		pokeapi.CaughtPokemon[params[0]] = pokemon
+		// I should lock and unlock this!
+		pokeapi.CaughtPokemon.Poke[params[0]] = pokemon
 	} else {
 		fmt.Printf("%s escaped!\n", params[0])
 	}

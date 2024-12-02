@@ -3,6 +3,7 @@ package pokeapi
 import (
 	"io"
 	"net/http"
+	"sync"
 	"time"
 
 	pokecache "github.com/samuelschmakel/pokedexcli/internal/pokecache"
@@ -405,4 +406,13 @@ func GetPokemonInfo(url string) ([]byte, error) {
 	return body, err
 }
 
-var CaughtPokemon = make(map[string]Pokemon)
+type caughtPokemon struct {
+	Poke map[string]Pokemon
+	Mu   sync.Mutex
+}
+
+var CaughtPokemon caughtPokemon
+
+func Init() {
+	CaughtPokemon.Poke = make(map[string]Pokemon)
+}

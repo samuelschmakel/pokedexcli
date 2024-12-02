@@ -10,7 +10,6 @@ import (
 )
 
 func startRepl() {
-
 	scanner := bufio.NewScanner(os.Stdin)
 
 	// start REPL loop
@@ -28,10 +27,14 @@ func startRepl() {
 		}
 
 		commandName := cleaned[0]
+		params := []string{}
+		if len(cleaned) > 1 {
+			params = cleaned[1:]
+		}
 
 		cmdFunc, exists := getCommands()[commandName]
 		if exists {
-			err := cmdFunc.callback(*&pokeapi.InitialConfig)
+			err := cmdFunc.callback(*&pokeapi.InitialConfig, params)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -57,7 +60,7 @@ func cleanInput(str string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*pokeapi.Config) error
+	callback    func(*pokeapi.Config, []string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -81,6 +84,11 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Displays the previous 20 location areas in the Pokemon world",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Displays a list of all Pokemon in a given area",
+			callback:    commandExplore,
 		},
 	}
 }

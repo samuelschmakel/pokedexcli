@@ -7,7 +7,10 @@ import (
 	pokeapi "github.com/samuelschmakel/pokedexcli/internal/pokeapi"
 )
 
-func commandMapb(myConfig *pokeapi.Config) error {
+func commandMapb(myConfig *pokeapi.Config, params []string) error {
+	if len(params) > 0 {
+		return fmt.Errorf("No parameters supported for mapb")
+	}
 	t, err := pokeapi.GetLocationAreas(myConfig.Previous)
 	if err != nil {
 		fmt.Println("You're at the beginning!")

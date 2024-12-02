@@ -8,7 +8,10 @@ import (
 
 var cliName string = "Pokedex"
 
-func commandHelp(myConfig *pokeapi.Config) error {
+func commandHelp(myConfig *pokeapi.Config, params []string) error {
+	if len(params) > 0 {
+		return fmt.Errorf("No parameters supported for help")
+	}
 	fmt.Printf("Welcome to %v! These are the available commands: \n", cliName)
 	fmt.Println("")
 	for _, cmd := range getCommands() {

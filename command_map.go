@@ -7,7 +7,10 @@ import (
 	pokeapi "github.com/samuelschmakel/pokedexcli/internal/pokeapi"
 )
 
-func commandMap(myConfig *pokeapi.Config) error {
+func commandMap(myConfig *pokeapi.Config, params []string) error {
+	if len(params) > 0 {
+		return fmt.Errorf("No parameters supported for map")
+	}
 	t, err := pokeapi.GetLocationAreas(myConfig.Next)
 	if err != nil {
 		fmt.Println("You're at the end!")

@@ -43,6 +43,7 @@ func commandCatch(myConfig *pokeapi.Config, params []string) error {
 	if roll <= defaultCatchRate {
 		// The pokemon was caught
 		fmt.Printf("%s was caught!\n", params[0])
+		fmt.Println("You may now inspect it with the inspect command.")
 
 		// Add the caught pokemon to the map
 		// I should lock and unlock this!

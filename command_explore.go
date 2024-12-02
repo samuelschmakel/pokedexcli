@@ -8,12 +8,10 @@ import (
 )
 
 func commandExplore(myConfig *pokeapi.Config, params []string) error {
-	fmt.Println(len(params))
 	if len(params) == 0 {
 		return fmt.Errorf("explore requires a parameter")
 	}
 
-	// Keep everything below this line
 	testURL := "https://pokeapi.co/api/v2/location-area/" + params[0] + "/"
 
 	t, err := pokeapi.GetLocationAreas(testURL)
